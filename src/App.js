@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { createStore, applyMiddleware, combineReducers } from "redux";
+import { Provider } from "react-redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import ReduxThunk from "redux-thunk";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import DetailPage from "./components/DetailPage";
+import HomeReducer from "./store/reducers/Home";
+import "./index.css";
+import Home from "./components/Home";
+
+const rootReducer = combineReducers({
+  user: HomeReducer,
+});
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(ReduxThunk))
+);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Router>
+        <Switch>
+          <Route path="/" component={Home} exact />
+          <Route path="/d" component={DetailPage} />
+        </Switch>
+      </Router>
+    </Provider>
   );
 }
 
